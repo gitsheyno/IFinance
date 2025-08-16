@@ -2,7 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { StatCard } from "./ui/Card-stat";
 import { statCards } from "@/app/lib/mocks/statCards";
-
+import { TransactionList } from "./TransactionList";
+import { mockTransactions } from "../lib/mocks/transactions";
+import { mockCategories } from "../lib/mocks/categories";
 export default function Transactions() {
   return (
     <div className="space-y-8">
@@ -29,6 +31,11 @@ export default function Transactions() {
           />
         ))}
       </div>
+      <TransactionList
+        transactions={mockTransactions}
+        categories={mockCategories}
+        currency="USD"
+      />
     </div>
   );
 }

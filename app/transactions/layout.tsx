@@ -4,8 +4,8 @@ export default function TransactionsLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className=" bg-background border-4">
-      <main className="border-2 border-yellow-200">{children}</main>
+    <div className=" bg-background">
+      <main className="">{children}</main>
     </div>
   );
 }
