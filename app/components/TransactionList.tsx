@@ -18,14 +18,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Transaction, Category } from "@/app/types";
+import { TransactionListProps } from "@/app/types";
 import { Filter, ArrowUpDown } from "lucide-react";
-
-interface TransactionListProps {
-  transactions: Transaction[];
-  categories: Category[];
-  currency: string;
-}
 
 export function TransactionList({
   transactions,

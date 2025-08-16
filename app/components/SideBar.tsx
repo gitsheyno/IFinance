@@ -33,7 +33,7 @@ const navigation = [
   },
   {
     name: "Budgets",
-    href: "/budgets",
+    href: "/budget",
     icon: Wallet,
   },
   {

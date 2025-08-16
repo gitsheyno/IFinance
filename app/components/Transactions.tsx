@@ -8,7 +8,6 @@ import { mockCategories } from "../lib/mocks/categories";
 export default function Transactions() {
   return (
     <div className="space-y-8">
-      <h1>Transactions</h1>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Transactions</h1>

@@ -28,9 +28,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="min-h-screen bg-background border-4">
+        <div className="min-h-screen bg-background">
           <Sidebar />
-          <main className="lg:pl-64 border-2 border-red-800">
+          <main className="lg:pl-64 ">
             <div className="container mx-auto p-4 lg:p-8">{children}</div>
           </main>
         </div>
