@@ -30,7 +30,7 @@ export default function RootLayout({
       >
         <div className="min-h-screen bg-background border-4">
           <Sidebar />
-          <main className="lg:pl-64 border-2 border-green-200">
+          <main className="lg:pl-64 border-2 border-red-800">
             <div className="container mx-auto p-4 lg:p-8 border-blue-100 border-2">
               {children}
             </div>
