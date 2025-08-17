@@ -36,16 +36,16 @@ const navigation = [
     href: "/budget",
     icon: Wallet,
   },
-  {
-    name: "Goals",
-    href: "/goals",
-    icon: Target,
-  },
-  {
-    name: "Analytics",
-    href: "/analytics",
-    icon: PieChart,
-  },
+  // {
+  //   name: "Goals",
+  //   href: "/goals",
+  //   icon: Target,
+  // },
+  // {
+  //   name: "Analytics",
+  //   href: "/analytics",
+  //   icon: PieChart,
+  // },
   {
     name: "Shopping List",
     href: "/shopping",
