@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { BudgetOverviews } from "../BudgetOverviews";
@@ -6,12 +7,7 @@ import { mockBudgets } from "@/app/lib/mocks/budget";
 import { mockTransactions } from "@/app/lib/mocks/transactions";
 import { mockCategories } from "@/app/lib/mocks/categories";
 import { SpendingChart } from "../charts/Spending-chart";
-import { CalendarIcon } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import {
   Dialog,
   DialogClose,
@@ -23,19 +19,31 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import BurdgetForm from "../BurdgetForm";
 export default function Budgets() {
+  const [createBudgetOpen, setCreateBudgetOpen] = useState(false);
+  const [editBudgetOpen, setEditBudgetOpen] = useState(false);
+  const [deleteBudgetOpen, setDeleteBudgetOpen] = useState(false);
+
+  const handleEdit = () => {
+    console.log("clicked edit");
+    setEditBudgetOpen(true);
+  };
+
+  const handleDelete = () => {
+    console.log("clicked edit");
+    setDeleteBudgetOpen(true);
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -45,7 +53,8 @@ export default function Budgets() {
             Track your spending limits and stay on budget
           </p>
         </div>
-        <Dialog>
+        {/* Create Budget Button */}
+        <Dialog open={createBudgetOpen} onOpenChange={setCreateBudgetOpen}>
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
@@ -60,65 +69,79 @@ export default function Budgets() {
               </DialogDescription>
             </DialogHeader>
             {/* Form */}
-            <div className="space-y-4 flex flex-col gap-4  pb-8">
-              <div className="flex flex-col gap-8">
-                <div className="space-y-2 w-full">
-                  <Label htmlFor="category">Category</Label>
-                  <Select>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Categories</SelectLabel>
-                        {mockCategories.map((category) => (
-                          <SelectItem
-                            key={category.categoryId}
-                            value={category.name}
-                          >
-                            {category.name}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid w-full items-center gap-3">
-                  <Label htmlFor="budget-limit">Budget Limit</Label>
-                  <Input
-                    id="budget-limit"
-                    type="number"
-                    placeholder="Enter Amount"
-                  />
-                  {
-                    //Todo add Budget Limit Validation
-                  }
-                </div>
-              </div>
-              {
-                //Todo Add Datepicker
-              }
-            </div>
+            <BurdgetForm categories={mockCategories} />
             <DialogFooter>
               <Button type="submit">Create Budget</Button>
               <DialogClose asChild>
-                <Button variant="secondary">Cancel</Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => setCreateBudgetOpen(false)}
+                >
+                  Cancel
+                </Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        {/* Edit Budget Button */}
+        <Dialog open={editBudgetOpen} onOpenChange={setEditBudgetOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Budget</DialogTitle>
+              <DialogDescription>Update your budget settings</DialogDescription>
+            </DialogHeader>
+            {/* Form */}
+            <BurdgetForm categories={mockCategories} />
+            <DialogFooter>
+              <Button type="submit">Update Budget</Button>
+              <DialogClose asChild>
+                <Button
+                  variant="secondary"
+                  onClick={() => setEditBudgetOpen(false)}
+                >
+                  Cancel
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        {/* Delete Budget Button */}
+        <AlertDialog open={deleteBudgetOpen} onOpenChange={setDeleteBudgetOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Budget</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete this budget? This action cannot
+                be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  console.log("Budget deleted");
+                }}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+        <SpendingChart
+          transactions={mockTransactions}
+          categories={mockCategories}
+        />
         <BudgetOverviews
           budgets={mockBudgets}
           transactions={mockTransactions}
           categories={mockCategories}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
           currency="USD"
-        />
-        <SpendingChart
-          transactions={mockTransactions}
-          categories={mockCategories}
         />
       </div>
     </div>

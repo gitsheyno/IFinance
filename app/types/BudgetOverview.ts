@@ -7,4 +7,6 @@ export type BudgetOverviewProps = {
   transactions: Transaction[];
   categories: Category[];
   currency: string;
+  onEdit: () => void;
+  onDelete: () => void;
 };

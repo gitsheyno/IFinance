@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Card,
@@ -6,17 +7,33 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { AlertTriangle, CheckCircle, TrendingUp } from "lucide-react";
+
+import {
+  AlertTriangle,
+  CheckCircle,
+  TrendingUp,
+  MoreHorizontal,
+  Edit,
+  Trash2,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { type BudgetOverviewProps } from "@/app/types";
 import { Progress } from "@/components/ui/progress";
 import { getBudgetProgress } from "@/app/lib/utils";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 export const BudgetOverviews = ({
   budgets,
   transactions,
   categories,
   currency,
+  onEdit,
+  onDelete,
 }: BudgetOverviewProps) => {
   const budgetData = budgets.map((budget) => {
     const category = categories.find((c) => c.categoryId === budget.categoryId);
@@ -67,18 +84,26 @@ export const BudgetOverviews = ({
       </CardHeader>
       <CardContent className="space-y-6">
         {budgetData.map((budget) => (
-          <div key={budget.budgetId} className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+          <div
+            key={budget.budgetId}
+            className="space-y-3 flex items-center justify-between gap-4"
+          >
+            <div className="flex items-center justify-between flex-1 ">
+              <div className="flex items-center gap-2 ">
                 <span className="text-lg">{budget.categoryIcon}</span>
                 <div>
-                  <h4 className="font-medium">{budget.categoryName}</h4>
-                  <p className="text-sm text-muted-foreground">
+                  <h4 className="font-medium text-sm lg:text-lg">
+                    {budget.categoryName}
+                  </h4>
+                  <p className="text-xs lg:text-sm text-muted-foreground">
                     {formatCurrency(budget.spent, currency)} of{" "}
                     {formatCurrency(budget.limitAmount, currency)}
                   </p>
                 </div>
               </div>
+            </div>
+
+            <div className="space-y-2  flex-3">
               <Badge
                 variant={getStatusColor(budget.status)}
                 className="flex items-center gap-1"
@@ -88,9 +113,6 @@ export const BudgetOverviews = ({
                   {budget.status.replace("-", " ")}
                 </span>
               </Badge>
-            </div>
-
-            <div className="space-y-2">
               <Progress
                 value={Math.min(budget.percentage, 100)}
                 className="h-2"
@@ -106,6 +128,26 @@ export const BudgetOverviews = ({
                       )} over budget`}
                 </span>
               </div>
+            </div>
+
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant={"outline"}>
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={onEdit}>
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={onDelete} className="text-red-600">
+                    <Trash2 className="h-4 w-4 mr-2 text-red-600" />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         ))}
