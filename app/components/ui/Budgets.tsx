@@ -29,6 +29,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import BurdgetForm from "../BurdgetForm";
+import { getBudgetProgress } from "@/app/lib/utils";
 export default function Budgets() {
   const [createBudgetOpen, setCreateBudgetOpen] = useState(false);
   const [editBudgetOpen, setEditBudgetOpen] = useState(false);
@@ -43,6 +44,30 @@ export default function Budgets() {
     console.log("clicked edit");
     setDeleteBudgetOpen(true);
   };
+
+  console.log("budget", mockBudgets, mockTransactions);
+
+  const budgetData = mockBudgets.map((budget) => {
+    const category = mockCategories.find(
+      (c) => c.categoryId === budget.categoryId
+    );
+    const progress = getBudgetProgress(
+      budget,
+      mockTransactions,
+      mockCategories
+    );
+
+    return {
+      ...budget,
+      categoryName: category?.name || "Unknown",
+      categoryIcon: category?.icon || "📊",
+      ...progress,
+    };
+  });
+
+  const budgetLimit = mockBudgets.reduce((sum, budget) => {
+    return sum + budget.limitAmount;
+  }, 0);
 
   return (
     <div className="space-y-8">
@@ -69,7 +94,10 @@ export default function Budgets() {
               </DialogDescription>
             </DialogHeader>
             {/* Form */}
-            <BurdgetForm categories={mockCategories} />
+            <BurdgetForm
+              categories={mockCategories}
+              budgetLimit={budgetLimit}
+            />
             <DialogFooter>
               <Button type="submit">Create Budget</Button>
               <DialogClose asChild>
@@ -136,9 +164,7 @@ export default function Budgets() {
           categories={mockCategories}
         />
         <BudgetOverviews
-          budgets={mockBudgets}
-          transactions={mockTransactions}
-          categories={mockCategories}
+          budgetData={budgetData}
           onEdit={handleEdit}
           onDelete={handleDelete}
           currency="USD"

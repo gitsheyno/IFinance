@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -15,8 +15,19 @@ import { Budget, Category } from "../types";
 type BudgetForm = {
   categories: Category[];
   budget?: Budget;
+  budgetLimit?: number;
 };
-export default function BurdgetForm({ categories }: BudgetForm) {
+export default function BurdgetForm({ categories, budgetLimit }: BudgetForm) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+
+    if (budgetLimit !== undefined && value > budgetLimit) {
+      setAmount(budgetLimit);
+    } else {
+      setAmount(value);
+    }
+  };
+  const [amount, setAmount] = useState<number>(0);
   return (
     <div className="space-y-4 flex flex-col gap-4  pb-8">
       <div className="flex flex-col gap-8">
@@ -40,10 +51,20 @@ export default function BurdgetForm({ categories }: BudgetForm) {
         </div>
         <div className="grid w-full items-center gap-3">
           <Label htmlFor="budget-limit">Budget Limit</Label>
-          <Input id="budget-limit" type="number" placeholder="Enter Amount" />
-          {
-            //Todo add Budget Limit Validation
-          }
+          <Input
+            id="budget-limit"
+            className={
+              (amount as number) === (budgetLimit ?? 0) ? "border-red-500" : ""
+            }
+            type="number"
+            placeholder="Enter Amount"
+            value={amount}
+            onChange={handleChange}
+            max={budgetLimit}
+          />
+          {budgetLimit !== undefined && amount >= budgetLimit && (
+            <p className="text-red-600">You cannot choose over {budgetLimit}</p>
+          )}
         </div>
       </div>
       {

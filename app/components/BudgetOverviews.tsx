@@ -19,7 +19,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { type BudgetOverviewProps } from "@/app/types";
 import { Progress } from "@/components/ui/progress";
-import { getBudgetProgress } from "@/app/lib/utils";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,25 +28,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 export const BudgetOverviews = ({
-  budgets,
-  transactions,
-  categories,
+  budgetData,
   currency,
   onEdit,
   onDelete,
 }: BudgetOverviewProps) => {
-  const budgetData = budgets.map((budget) => {
-    const category = categories.find((c) => c.categoryId === budget.categoryId);
-    const progress = getBudgetProgress(budget, transactions, categories);
-
-    return {
-      ...budget,
-      categoryName: category?.name || "Unknown",
-      categoryIcon: category?.icon || "📊",
-      ...progress,
-    };
-  });
-
   const formatCurrency = (amount: number, currency: string) =>
     new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -89,14 +75,14 @@ export const BudgetOverviews = ({
             className="space-y-3 flex items-center justify-between gap-4"
           >
             <div className="flex items-center justify-between flex-1 ">
-              <div className="flex items-center gap-2 ">
+              <div className="flex items-start gap-2 ">
                 <span className="text-lg">{budget.categoryIcon}</span>
                 <div>
                   <h4 className="font-medium text-sm lg:text-lg">
                     {budget.categoryName}
                   </h4>
                   <p className="text-xs lg:text-sm text-muted-foreground">
-                    {formatCurrency(budget.spent, currency)} of{" "}
+                    {formatCurrency(budget.spent, currency)} of
                     {formatCurrency(budget.limitAmount, currency)}
                   </p>
                 </div>
@@ -115,10 +101,10 @@ export const BudgetOverviews = ({
               </Badge>
               <Progress
                 value={Math.min(budget.percentage, 100)}
-                className="h-2"
+                className="h-2 mb-0"
               />
-              <div className="flex justify-between text-sm text-muted-foreground">
-                <span>{budget.percentage.toFixed(1)}% used</span>
+              <div className="flex  text-sm text-muted-foreground  justify-end">
+                {/* <span>{budget.percentage.toFixed(1)}% used</span> */}
                 <span>
                   {budget.remaining >= 0
                     ? `${formatCurrency(budget.remaining, currency)} remaining`
